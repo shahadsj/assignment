@@ -2,29 +2,39 @@ name: Deploy static site to GitHub Pages
 
 on:
   push:
-    branches: [assignment]  # 👈 Changed from 'main' to 'assignment'
+    branches: [assignment]       # ← your working branch
 
+# minimal but future-proof permissions
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# optional – ensures only one deployment runs at a time
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   deploy:
+    environment:
+      name: github-pages         # required by Pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: 🛎️  Checkout repository
+        uses: actions/checkout@v4        # latest checkout
 
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v3
+      - name: ⚙️  Configure GitHub Pages
+        uses: actions/configure-pages@v5 # latest config helper
 
-      - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v2
+      - name: 📦  Upload site as Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: .  # 👈 Make sure index.html is at the root
+          path: .                         # root folder holding index.html
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
-
+      - name: 🚀  Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
