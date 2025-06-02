@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Deploy when pushing to main
+      - main
 
 permissions:
   contents: read
@@ -28,7 +28,7 @@ jobs:
       - name: Upload HTML content
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .  # Assuming index.html is in root
+          path: .  # Assuming index.html is in the root
 
       - name: Deploy to GitHub Pages
         id: deployment
